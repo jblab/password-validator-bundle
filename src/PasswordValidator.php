@@ -51,7 +51,7 @@ class PasswordValidator
      * @param bool        $requireUppercase
      * @param bool        $requireLowercase
      * @param bool        $requireNumber
-     * @param string      $specialCharacterSet
+     * @param string|null $specialCharacterSet
      * @param int         $minimumLength
      * @param int|null    $maximumLength
      * @param string|null $excludedCharacterSet
@@ -59,7 +59,7 @@ class PasswordValidator
      * @throws Exception
      */
     public function __construct(bool $requireSpecialCharacter, bool $requireUppercase, bool $requireLowercase,
-        bool $requireNumber, string $specialCharacterSet, int $minimumLength = 1, int $maximumLength = null,
+        bool $requireNumber, string $specialCharacterSet = null, int $minimumLength = 1, int $maximumLength = null,
         string $excludedCharacterSet = null
     ) {
         $this->minimumLength           = $minimumLength;
