@@ -24,7 +24,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
             ->integerNode('minimum_length')->defaultValue(8)->info('Minimum password length.')->end()
-            ->integerNode('maximum_length')->defaultValue(8)->info('Maximum password length.')->end()
+            ->integerNode('maximum_length')->defaultValue(64)->info('Maximum password length.')->end()
             ->booleanNode('require_special_character')->defaultTrue()->info('Whether or not to require a special character.')->end()
             ->booleanNode('require_uppercase')->defaultTrue()->info('Whether or not to require a uppercase letter.')->end()
             ->booleanNode('require_lowercase')->defaultTrue()->info('Whether or not to require a lowercase letter.')->end()
