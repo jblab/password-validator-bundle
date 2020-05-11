@@ -8,8 +8,24 @@ Install the package with:
 $ composer require jblab/password-validator-bundle
 ```
 
-And... that's it. If you're *not* using Symfony Flex, you'll also need to enable the `Jblab\PasswordValidatorBundle`
- in your `AppKernel.php` file.
+And... that's it. If you're *not* using Symfony Flex, you'll also need to enable the
+`Jblab\PasswordValidatorBundle\PasswordValidatorBundle` in your `AppKernel.php` file.
+
+In Symfony 3.4: 
+
+```php
+// app/AppKernel.php
+class AppKernel extends Kernel
+{
+    public function registerBundles()
+    {
+        $bundles = [
+            // ... 
+            new Jblab\PasswordValidatorBundle\PasswordValidatorBundle(),
+        ];
+    }
+}
+```
 
 ## Usage
 This bundle provides a single service for validating passwords, which
