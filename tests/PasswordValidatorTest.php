@@ -14,6 +14,10 @@ use Jblab\PasswordValidatorBundle\Exception\PasswordUppercaseException;
 use Jblab\PasswordValidatorBundle\PasswordValidator;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class PasswordValidatorTest
+ * @package Jblab\PasswordValidatorBundle\Tests
+ */
 class PasswordValidatorTest extends TestCase
 {
     public function testItValidatesMinimumLength()
