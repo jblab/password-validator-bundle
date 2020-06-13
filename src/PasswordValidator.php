@@ -188,6 +188,42 @@ class PasswordValidator
     }
 
     /**
+     * @return string
+     */
+    public function getRegEx(): string
+    {
+        $regEx = '^';
+
+        if ($this->requireLowercase) {
+            $regEx .= '(?=.*[a-z])';
+        }
+
+        if ($this->requireUppercase) {
+            $regEx .= '(?=.*[A-Z])';
+        }
+
+        if ($this->requireNumber) {
+            $regEx .= '(?=.*[0-9])';
+        }
+
+        if ($this->requireSpecialCharacter) {
+            $regEx .= sprintf('(?=.*[%s])', $this->escapeSpecialCharacters($this->specialCharacterSet));
+        }
+
+        if ($this->excludedCharacterSet) {
+            $regEx .= sprintf('[^*%s]', $this->escapeSpecialCharacters($this->excludedCharacterSet));
+        }
+
+        if ($this->minimumLength || $this->maximumLength) {
+            $regEx .= sprintf('{%s,%s}', (string)$this->minimumLength, (string)$this->maximumLength);
+        }
+
+        $regEx .= '$';
+
+        return $regEx;
+    }
+
+    /**
      * @param string $characters
      *
      * @return string
