@@ -15,13 +15,12 @@ php:
   - 7.2
   - 7.3
   - 7.4
+  - 8.0
 
 matrix:
   fast_finish: true
   include:
     # Minimum supported dependencies with the latest and oldest PHP version
-    - php: 7.4
-      env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="max[self]=0"
     - php: 7.1
       env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest" SYMFONY_DEPRECATIONS_HELPER="max[self]=0"
 
@@ -31,14 +30,18 @@ matrix:
     - php: 7.3
     - php: 7.4
       env: COVERAGE=true PHPUNIT_FLAGS="-v --coverage-text"
+    - php: 8.0
 
-      # Test LTS versions. This makes sure we do not use Symfony packages with version greater
-      # than 3. Read more at https://github.com/symfony/lts
+      # Test LTS versions. This makes sure we do not use Symfony packages with version greater than 4.4.
     - php: 7.4
-      env: DEPENDENCIES="symfony/lts:^3"
+      env:
+        - DEPENDENCIES="symfony/flex"
+        - LTS_CONFIG="4.4.*"
 
       # Latest commit to master
     - php: 7.4
+      env: STABILITY="dev"
+    - php: 8.0
       env: STABILITY="dev"
 
   allow_failures:
@@ -48,6 +51,7 @@ matrix:
 before_install:
   - if [[ $COVERAGE != true ]]; then phpenv config-rm xdebug.ini || true; fi
   - if ! [ -z "$STABILITY" ]; then composer config minimum-stability ${STABILITY}; fi;
+  - if ! [ -z "$LTS_CONFIG" ]; then composer config extra.symfony.require ${LTS_CONFIG}; fi;
   - if ! [ -v "$DEPENDENCIES" ]; then composer require --no-update ${DEPENDENCIES}; fi;
 
 install:
