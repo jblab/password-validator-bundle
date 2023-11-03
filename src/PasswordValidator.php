@@ -39,22 +39,28 @@ class PasswordValidator
      * @var string
      */
     protected $specialCharacterSet;
+    /**
+     * @var string|null
+     */
+    protected $excludedCharacterSet;
 
     /**
      * PasswordValidator constructor.
      *
-     * @param bool     $requireSpecialCharacter
-     * @param bool     $requireUppercase
-     * @param bool     $requireLowercase
-     * @param bool     $requireNumber
-     * @param string   $specialCharacterSet
-     * @param int      $minimumLength
-     * @param int|null $maximumLength
+     * @param bool        $requireSpecialCharacter
+     * @param bool        $requireUppercase
+     * @param bool        $requireLowercase
+     * @param bool        $requireNumber
+     * @param string      $specialCharacterSet
+     * @param int         $minimumLength
+     * @param int|null    $maximumLength
+     * @param string|null $excludedCharacterSet
      *
      * @throws Exception
      */
     public function __construct(bool $requireSpecialCharacter, bool $requireUppercase, bool $requireLowercase,
-        bool $requireNumber, string $specialCharacterSet, int $minimumLength = 1, int $maximumLength = null
+        bool $requireNumber, string $specialCharacterSet, int $minimumLength = 1, int $maximumLength = null,
+        string $excludedCharacterSet = null
     ) {
         $this->minimumLength           = $minimumLength;
         $this->maximumLength           = $maximumLength;
@@ -63,6 +69,7 @@ class PasswordValidator
         $this->requireLowercase        = $requireLowercase;
         $this->requireNumber           = $requireNumber;
         $this->specialCharacterSet     = $specialCharacterSet;
+        $this->excludedCharacterSet    = $excludedCharacterSet;
 
         $this->validateConfiguration();
     }
@@ -135,9 +142,8 @@ class PasswordValidator
             }
         }
 
-        // Special character
+        // Special character validation
         if ($this->requireSpecialCharacter) {
-            dump($this->escapeSpecialCharacters($this->specialCharacterSet));
             $pattern = sprintf('/[%s]+/', $this->escapeSpecialCharacters($this->specialCharacterSet));
             if (!preg_match($pattern, $password)) {
                 if ($throwError) {
@@ -149,6 +155,19 @@ class PasswordValidator
 
                 return false;
             }
+        }
+
+        // Excluded characters validation
+        $pattern = sprintf('/[%s]+/', $this->escapeSpecialCharacters($this->excludedCharacterSet));
+        if (preg_match($pattern, $password)) {
+            if ($throwError) {
+                throw new PasswordValidationException(sprintf(
+                    'Password may not contain any of these characters "%s".',
+                    $this->excludedCharacterSet
+                ));
+            }
+
+            return false;
         }
 
         return true;
