@@ -1,5 +1,7 @@
 # Jblab Password Validator Bundle
 
+[![Build Status](https://travis-ci.org/jblab/password-validator-bundle.svg?branch=master)](https://travis-ci.org/jblab/password-validator-bundle)
+
 This is a way to validate a password based on certain criteria into your Symfony application.
 
 Install the package with:
