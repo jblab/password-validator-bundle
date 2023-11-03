@@ -170,16 +170,18 @@ class PasswordValidator
         }
 
         // Excluded characters validation
-        $pattern = sprintf('/[%s]+/', $this->escapeSpecialCharacters($this->excludedCharacterSet));
-        if (preg_match($pattern, $password)) {
-            if ($throwError) {
-                throw new PasswordExcludedCharacterException(sprintf(
-                    'Password may not contain any of these characters "%s".',
-                    $this->excludedCharacterSet
-                ));
-            }
+        if ($this->excludedCharacterSet) {
+            $pattern = sprintf('/[%s]+/', $this->escapeSpecialCharacters($this->excludedCharacterSet));
+            if (preg_match($pattern, $password)) {
+                if ($throwError) {
+                    throw new PasswordExcludedCharacterException(sprintf(
+                        'Password may not contain any of these characters "%s".',
+                        $this->excludedCharacterSet
+                    ));
+                }
 
-            return false;
+                return false;
+            }
         }
 
         return true;
@@ -192,7 +194,7 @@ class PasswordValidator
      */
     protected function escapeSpecialCharacters(string $characters): string
     {
-        $needEscape = ['[', ']', '(', ')', '{', '}', '*', '+', '?', '|', '^', '$', '.', '\\', '/'];
+        $needEscape = ['[', ']', '(', ')', '{', '}', '*', '+', '?', '|', '^', '$', '.', '\\', '/', '=', '-'];
         $characters = array_unique(str_split($characters));
         $escaped    = [];
 
