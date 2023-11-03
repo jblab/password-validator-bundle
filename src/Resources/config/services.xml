@@ -5,7 +5,7 @@
         http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="jblab_password_validator.password_validator" class="Jblab\PasswordValidatorBundle\PasswordValidator" public="true" />
+        <service id="jblab_password_validator.password_validator" class="Jblab\PasswordValidatorBundle\PasswordValidator" public="true"/>
         <service id="Jblab\PasswordValidatorBundle\PasswordValidator" alias="jblab_password_validator.password_validator" public="false"/>
     </services>
 </container>
