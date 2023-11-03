@@ -180,12 +180,12 @@ class PasswordValidator
      */
     protected function escapeSpecialCharacters(string $characters): string
     {
-        $needEscape = ['[', ']', '(', ')', '{', '}', '*', '+', '?', '|', '^', '$', '.', '\\'];
+        $needEscape = ['[', ']', '(', ')', '{', '}', '*', '+', '?', '|', '^', '$', '.', '\\', '/'];
         $characters = array_unique(str_split($characters));
         $escaped    = [];
 
         foreach ($characters as $character) {
-            $escaped[] = in_array($character, $needEscape) ? addslashes($character) : $character;
+            $escaped[] = in_array($character, $needEscape) ? '\\' . $character : $character;
         }
 
         return join('', $escaped);
