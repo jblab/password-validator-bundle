@@ -2,7 +2,7 @@
     "name": "jblab/password-validator-bundle",
     "description": "Validates a password based on certain criteria.",
     "type": "symfony-bundle",
-    "license": "MIT",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "Julien Bonnier",
