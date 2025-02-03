@@ -1,0 +1,72 @@
+name: Release
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Release version
+    runs-on: ubuntu-latest
+    environment: main
+    steps:
+      - uses: actions/create-github-app-token@v1.11.0
+        id: app-token
+        with:
+          app-id: ${{ vars.GHA_BOT_APP_ID }}
+          private-key: ${{ secrets.GHA_BOT_PRIVATE_KEY }}
+          repositories: |
+            password-validator-bundle
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Set up Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Get Latest Tag and Release
+        run: |
+          LATEST_RELEASE=$(gh release list --repo jblab/password-validator-bundle --limit 1 --exclude-drafts --json name -q .[0].name || echo 'N/A')
+          LATEST_TAG=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/${{ github.repository }}/tags -q .[0].name || echo 'N/A')
+          echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run semantic-release
+        id: semantic
+        run: |
+          npx semantic-release 2>&1 | tee release_output.txt
+          TAG=$(tail -1 release_output.txt | grep -oP "\d+\.\d+\.\d+" || true)
+          if [[ -n "$TAG" ]]; then
+            echo "NEW_TAG=$TAG" >> $GITHUB_ENV
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Export outputs
+        id: variables
+        run: |
+          echo "new-tag=${{ env.NEW_TAG }}" >> $GITHUB_OUTPUT
+
+      - name: Publish Summary
+        run: |
+          echo "## New Tag summary" >> $GITHUB_STEP_SUMMARY
+          echo "A new Release and Tag has been created."
+          echo "| | Prvious | New |" >> $GITHUB_STEP_SUMMARY
+          echo "| --- | :-: | :-: |" >> $GITHUB_STEP_SUMMARY
+          echo "| Tag | ${{ env.LATEST_TAG }} | ${{ env.NEW_TAG }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Release | ${{ env.LATEST_RELEASE }} | ${{ env.NEW_TAG }} |" >> $GITHUB_STEP_SUMMARY

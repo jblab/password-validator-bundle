@@ -69,6 +69,8 @@ jobs:
           echo "## PHPUnit Test Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           if [ -f test-results.txt ]; then
+            sed -i 's/^ \[x\]/✔/g' test-results.txt
+            sed -i 's/^ \[ \]/❌/g' test-results.txt
             cat test-results.txt >> $GITHUB_STEP_SUMMARY
           else
             echo "No test results found." >> $GITHUB_STEP_SUMMARY
