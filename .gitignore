@@ -3,6 +3,7 @@
 /tests/cache
 /vendor/
 /phpunit.xml
+node_modules/
 .composer/
 composer.lock
 coverage.xml
