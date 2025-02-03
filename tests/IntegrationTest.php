@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the Jblab PasswordValidatorBundle package.
+ * Copyright (c) Jblab <https://jblab.io/>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Jblab\PasswordValidatorBundle\Tests;
 
 use Exception;
@@ -8,13 +15,8 @@ use Jblab\PasswordValidatorBundle\PasswordValidator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
-/**
- * Class IntegrationTest
- * @package Jblab\PasswordValidatorBundle\Tests
- */
 class IntegrationTest extends TestCase
 {
     public function testServiceWiring()
@@ -48,22 +50,10 @@ class IntegrationTest extends TestCase
     }
 }
 
-/**
- * Class JblabPasswordValidatorTestingKernel
- * @package Jblab\PasswordValidatorBundle\Tests
- */
 class JblabPasswordValidatorTestingKernel extends Kernel
 {
-    /**
-     * @var array
-     */
-    private $passwordValidatorConfig;
+    private array $passwordValidatorConfig;
 
-    /**
-     * JblabPasswordValidatorTestingKernel constructor.
-     *
-     * @param array $passwordValidatorConfig
-     */
     public function __construct(array $passwordValidatorConfig = [])
     {
         parent::__construct('test', true);
@@ -71,9 +61,9 @@ class JblabPasswordValidatorTestingKernel extends Kernel
     }
 
     /**
-     * @return BundleInterface[]
+     * @return JblabPasswordValidatorBundle[]
      */
-    public function registerBundles()
+    public function registerBundles(): array
     {
         return [
             new JblabPasswordValidatorBundle()
@@ -81,21 +71,16 @@ class JblabPasswordValidatorTestingKernel extends Kernel
     }
 
     /**
-     * @param LoaderInterface $loader
-     *
      * @throws Exception
      */
-    public function registerContainerConfiguration(LoaderInterface $loader)
+    public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load(function (ContainerBuilder $container) {
             $container->loadFromExtension('jblab_password_validator', $this->passwordValidatorConfig);
         });
     }
 
-    /**
-     * @return string
-     */
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return __DIR__ . '/cache/' . spl_object_hash($this);
     }

@@ -62,20 +62,14 @@ jobs:
       - name: "Install dependencies"
         run: "COMPOSER_ROOT_VERSION=dev-master composer update --no-progress --prefer-dist ${{ matrix.flags }}"
       - name: "PHPUnit"
-        run: "php vendor/bin/simple-phpunit --testdox-html test-results.html"
+        run: "php vendor/bin/simple-phpunit --testdox-text test-results.txt"
       - name: "Parse JUnit Logs and Publish Summary"
         if: always()
         run: |
           echo "## PHPUnit Test Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          if [ -f test-results.html ]; then
-            cat test-results.html >> $GITHUB_STEP_SUMMARY
-            # echo "| Test Name | File | Line | Assertions | Time (s) | Status |" >> $GITHUB_STEP_SUMMARY
-            # echo "|-----------|------|------|------------|----------|--------|" >> $GITHUB_STEP_SUMMARY
-            # # Use jq to extract test case details
-            # jq -r '.tests | to_entries[] | .value as $test | 
-            #   "| \($test.test) | \($test.file // "N/A") | \($test.line // "N/A") | \($test.assertions // 0) | \($test.time) | \($test.status | if . == "pass" then "✅ Pass" else "❌ Fail" end) |"' report.json >> $GITHUB_STEP_SUMMARY
+          if [ -f test-results.txt ]; then
+            cat test-results.txt >> $GITHUB_STEP_SUMMARY
           else
             echo "No test results found." >> $GITHUB_STEP_SUMMARY
           fi
-

@@ -1,6 +1,6 @@
 # Password Validator Bundle <img src="https://assets.jblab.info/2024/03/17/jblab-logo-with-text.26da23672fc44c17078dc8ce2ff8495ddb190163.webp" alt="jblab logo" width="120" align="right" style="max-width: 100%">
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](LICENSE) [![Latest Release](https://img.shields.io/github/release/jblab/password-validator-bundle.svg?style=flat-square)](https://github.com/jblab/password-validator-bundle/releases/latest)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](LICENSE) [![Latest Release](https://img.shields.io/github/release/jblab/password-validator-bundle.svg?style=flat-square)](https://github.com/jblab/password-validator-bundle/releases/latest) ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/jblab/password-validator-bundle/ci.yaml?style=flat-square)
 
 **Password Validator Bundle** is a Symfony package to help you validate passwords against customizable criteria with
 ease.
@@ -11,25 +11,6 @@ Install the bundle via Composer:
 
 ```shell
 composer require jblab/password-validator-bundle
-```
-
-And... that's it. If you're *not* using Symfony Flex, you'll also need to enable the
-`Jblab\PasswordValidatorBundle\PasswordValidatorBundle` in your `AppKernel.php` file.
-
-In Symfony 3.4:
-
-```php
-// app/AppKernel.php
-class AppKernel extends Kernel
-{
-    public function registerBundles()
-    {
-        $bundles = [
-            // ... 
-            new Jblab\PasswordValidatorBundle\PasswordValidatorBundle(),
-        ];
-    }
-}
 ```
 
 ## Usage
