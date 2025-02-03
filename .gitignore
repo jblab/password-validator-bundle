@@ -1,6 +1,9 @@
-/vendor/
-composer.lock
-/phpunit.xml
+/.idea/
 /.phpunit.result.cache
 /tests/cache
-/.idea/
+/vendor/
+/phpunit.xml
+.composer/
+composer.lock
+coverage.xml
+*.cache

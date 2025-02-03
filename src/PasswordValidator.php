@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the Jblab PasswordValidatorBundle package.
+ * Copyright (c) Jblab <https://jblab.io/>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Jblab\PasswordValidatorBundle;
 
 use Jblab\PasswordValidatorBundle\Exception\ConfigurationException;
@@ -11,62 +18,29 @@ use Jblab\PasswordValidatorBundle\Exception\PasswordNumberException;
 use Jblab\PasswordValidatorBundle\Exception\PasswordSpecialCharacterException;
 use Jblab\PasswordValidatorBundle\Exception\PasswordUppercaseException;
 
-/**
- * Class Validator
- * @package Jblab\PasswordValidatorBundle
- */
-class PasswordValidator
+class PasswordValidator implements PasswordValidatorInterface
 {
-    /**
-     * @var int
-     */
-    protected $minimumLength;
-    /**
-     * @var int
-     */
-    protected $maximumLength;
-    /**
-     * @var bool
-     */
-    protected $requireSpecialCharacter;
-    /**
-     * @var bool
-     */
-    protected $requireUppercase;
-    /**
-     * @var bool
-     */
-    protected $requireLowercase;
-    /**
-     * @var bool
-     */
-    protected $requireNumber;
-    /**
-     * @var string
-     */
-    protected $specialCharacterSet;
-    /**
-     * @var string|null
-     */
-    protected $excludedCharacterSet;
+    protected int $minimumLength;
+    protected ?int $maximumLength;
+    protected bool $requireSpecialCharacter;
+    protected bool $requireUppercase;
+    protected bool $requireLowercase;
+    protected bool $requireNumber;
+    protected ?string $specialCharacterSet;
+    protected ?string $excludedCharacterSet;
 
     /**
-     * PasswordValidator constructor.
-     *
-     * @param bool        $requireSpecialCharacter
-     * @param bool        $requireUppercase
-     * @param bool        $requireLowercase
-     * @param bool        $requireNumber
-     * @param string|null $specialCharacterSet
-     * @param int         $minimumLength
-     * @param int|null    $maximumLength
-     * @param string|null $excludedCharacterSet
-     *
      * @throws ConfigurationException
      */
-    public function __construct(bool $requireSpecialCharacter, bool $requireUppercase, bool $requireLowercase,
-        bool $requireNumber, string $specialCharacterSet = null, int $minimumLength = 1, int $maximumLength = null,
-        string $excludedCharacterSet = null
+    public function __construct(
+        bool $requireSpecialCharacter,
+        bool $requireUppercase,
+        bool $requireLowercase,
+        bool $requireNumber,
+        ?string $specialCharacterSet = null,
+        int $minimumLength = 1,
+        ?int $maximumLength = null,
+        ?string $excludedCharacterSet = null
     ) {
         $this->minimumLength           = $minimumLength;
         $this->maximumLength           = $maximumLength;
@@ -81,11 +55,8 @@ class PasswordValidator
     }
 
     /**
-     * @param string $password
-     * @param bool   $throwException If true the validator will throw an exception instead
+     * @param bool $throwException If true the validator will throw an exception instead
      *                               of returning false when password isn't valid.
-     *
-     * @return bool
      * @throws PasswordExcludedCharacterException
      * @throws PasswordLowercaseException
      * @throws PasswordMaximumLengthException
@@ -96,99 +67,40 @@ class PasswordValidator
      */
     public function validate(string $password, bool $throwException = false): bool
     {
-        // Length validation
-        if (null !== $this->maximumLength) {
-            if ($this->maximumLength < strlen($password)) {
-                if ($throwException) {
-                    throw new PasswordMaximumLengthException(sprintf(
-                        'Password must be %d or less characters long.',
-                        $this->maximumLength
-                    ));
-                }
-
-                return false;
-            }
-        }
-
-        if ($this->minimumLength > strlen($password)) {
-            if ($throwException) {
-                throw new PasswordMinimumLengthException(sprintf(
-                    'Password must be at least %d characters long.',
-                    $this->minimumLength
-                ));
-            }
-
+        if (!$this->validateMaximumLength($password, $throwException)) {
             return false;
         }
 
-        // Lowercase letter validation
-        if ($this->requireLowercase) {
-            if (!preg_match('/[a-z]+/', $password)) {
-                if ($throwException) {
-                    throw new PasswordLowercaseException('Password must contain at least one lowercase letter.');
-                }
-
-                return false;
-            }
+        if (!$this->validateMinimumLength($password, $throwException)) {
+            return false;
         }
 
-        // Uppercase letter validation
-        if ($this->requireUppercase) {
-            if (!preg_match('/[A-Z]+/', $password)) {
-                if ($throwException) {
-                    throw new PasswordUppercaseException('Password must contain at least one uppercase letter.');
-                }
-
-                return false;
-            }
+        if (!$this->validateLowercaseLetter($password, $throwException)) {
+            return false;
         }
 
-        // Number validation
-        if ($this->requireNumber) {
-            if (!preg_match('/[\d]+/', $password)) {
-                if ($throwException) {
-                    throw new PasswordNumberException('Password must contain at least one number.');
-                }
-
-                return false;
-            }
+        if (!$this->validateUppercaseLetter($password, $throwException)) {
+            return false;
         }
 
-        // Special character validation
-        if ($this->requireSpecialCharacter) {
-            $pattern = sprintf('/[%s]+/', $this->escapeSpecialCharacters($this->specialCharacterSet));
-            if (!preg_match($pattern, $password)) {
-                if ($throwException) {
-                    throw new PasswordSpecialCharacterException(sprintf(
-                        'Password must contain at least one special character from this list "%s".',
-                        $this->specialCharacterSet
-                    ));
-                }
-
-                return false;
-            }
+        if (!$this->validateNumber($password, $throwException)) {
+            return false;
         }
 
-        // Excluded characters validation
-        if ($this->excludedCharacterSet) {
-            $pattern = sprintf('/[%s]+/', $this->escapeSpecialCharacters($this->excludedCharacterSet));
-            if (preg_match($pattern, $password)) {
-                if ($throwException) {
-                    throw new PasswordExcludedCharacterException(sprintf(
-                        'Password may not contain any of these characters "%s".',
-                        $this->excludedCharacterSet
-                    ));
-                }
+        if (!$this->validateSpecialCharacters($password, $throwException)) {
+            return false;
+        }
 
-                return false;
-            }
+        if (!$this->validateExcludedCharacters($password, $throwException)) {
+            return false;
         }
 
         return true;
     }
 
     /**
-     * @return string
+     * Returns a regular expression that can be used to validate
+     * a password based on the current bundle configuration.
      */
     public function getRegEx(): string
     {
@@ -215,7 +127,7 @@ class PasswordValidator
         }
 
         if ($this->minimumLength || $this->maximumLength) {
-            $regEx .= sprintf('{%s,%s}', (string)$this->minimumLength, (string)$this->maximumLength);
+            $regEx .= sprintf('{%s,%s}', (string) $this->minimumLength, (string) $this->maximumLength);
         }
 
         $regEx .= '$';
@@ -224,10 +136,125 @@ class PasswordValidator
     }
 
     /**
-     * @param string $characters
-     *
-     * @return string
+     * @throws PasswordMaximumLengthException
      */
+    protected function validateMaximumLength(string $password, bool $throwException): bool
+    {
+        if (!is_null($this->maximumLength) && $this->maximumLength < strlen($password)) {
+            if ($throwException) {
+                throw new PasswordMaximumLengthException(
+                    sprintf(
+                        'Password must be %d or less characters long.',
+                        $this->maximumLength
+                    )
+                );
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws PasswordMinimumLengthException
+     */
+    protected function validateMinimumLength(string $password, bool $throwException): bool
+    {
+        if ($this->minimumLength > strlen($password)) {
+            if ($throwException) {
+                throw new PasswordMinimumLengthException(
+                    sprintf(
+                        'Password must be at least %d characters long.',
+                        $this->minimumLength
+                    )
+                );
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws PasswordLowercaseException
+     */
+    protected function validateLowercaseLetter(string $password, bool $throwException): bool
+    {
+        if ($this->requireLowercase) {
+            if (!preg_match('/[a-z]+/', $password)) {
+                if ($throwException) {
+                    throw new PasswordLowercaseException('Password must contain at least one lowercase letter.');
+                }
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws PasswordUppercaseException
+     */
+    protected function validateUppercaseLetter(string $password, bool $throwException): bool
+    {
+        if ($this->requireUppercase) {
+            if (!preg_match('/[A-Z]+/', $password)) {
+                if ($throwException) {
+                    throw new PasswordUppercaseException('Password must contain at least one uppercase letter.');
+                }
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws PasswordNumberException
+     */
+    protected function validateNumber(string $password, bool $throwException): bool
+    {
+        if ($this->requireNumber) {
+            if (!preg_match('/\d+/', $password)) {
+                if ($throwException) {
+                    throw new PasswordNumberException('Password must contain at least one number.');
+                }
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws PasswordSpecialCharacterException
+     */
+    protected function validateSpecialCharacters(string $password, bool $throwException): bool
+    {
+        if ($this->requireSpecialCharacter) {
+            $pattern = sprintf('/[%s]+/', $this->escapeSpecialCharacters($this->specialCharacterSet));
+            if (!preg_match($pattern, $password)) {
+                if ($throwException) {
+                    throw new PasswordSpecialCharacterException(
+                        sprintf(
+                            'Password must contain at least one special character from this list "%s".',
+                            $this->specialCharacterSet
+                        )
+                    );
+                }
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     protected function escapeSpecialCharacters(string $characters): string
     {
         $needEscape = ['[', ']', '(', ')', '{', '}', '*', '+', '?', '|', '^', '$', '.', '\\', '/', '=', '-'];
@@ -242,9 +269,33 @@ class PasswordValidator
     }
 
     /**
+     * @throws PasswordExcludedCharacterException
+     */
+    protected function validateExcludedCharacters(string $password, bool $throwException): bool
+    {
+        if ($this->excludedCharacterSet) {
+            $pattern = sprintf('/[%s]+/', $this->escapeSpecialCharacters($this->excludedCharacterSet));
+            if (preg_match($pattern, $password)) {
+                if ($throwException) {
+                    throw new PasswordExcludedCharacterException(
+                        sprintf(
+                            'Password may not contain any of these characters "%s".',
+                            $this->excludedCharacterSet
+                        )
+                    );
+                }
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @throws ConfigurationException
      */
-    private function validateConfiguration()
+    private function validateConfiguration(): void
     {
         if ($this->minimumLength < 1) {
             throw new ConfigurationException('Invalid minimum length provided, must be at least 1.');
@@ -258,7 +309,10 @@ class PasswordValidator
             throw new ConfigurationException('Maximum password length can\'t be less than minimum password length');
         }
 
-        if (strlen($this->specialCharacterSet) === 0 && $this->requireSpecialCharacter) {
+        if (!is_null($this->specialCharacterSet)
+            && strlen($this->specialCharacterSet) === 0
+            && $this->requireSpecialCharacter
+        ) {
             throw new ConfigurationException('Special character is required but character set is empty.');
         }
     }

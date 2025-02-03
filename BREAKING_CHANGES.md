@@ -1,5 +1,6 @@
 # Breaking Changes
 
-## x.x.x
+## 2.0.0
 
-Breaking change description
+- Drop support for Symfony < 6.4
+- Drop support for PHP < 8.1
