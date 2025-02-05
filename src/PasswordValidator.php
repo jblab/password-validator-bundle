@@ -123,11 +123,15 @@ class PasswordValidator implements PasswordValidatorInterface
         }
 
         if ($this->excludedCharacterSet) {
-            $regEx .= sprintf('[^*%s]', $this->escapeSpecialCharacters($this->excludedCharacterSet));
+            $regEx .= sprintf('(?!.*[%s])', $this->escapeSpecialCharacters($this->excludedCharacterSet));
         }
 
-        if ($this->minimumLength || $this->maximumLength) {
-            $regEx .= sprintf('{%s,%s}', (string) $this->minimumLength, (string) $this->maximumLength);
+        if ($this->minimumLength && $this->maximumLength) {
+            $regEx .= sprintf('.{%d,%d}', $this->minimumLength, $this->maximumLength);
+        } elseif ($this->minimumLength) {
+            $regEx .= sprintf('.{%d,}', $this->minimumLength);
+        } elseif ($this->maximumLength) {
+            $regEx .= sprintf('.{0,%d}', $this->maximumLength);
         }
 
         $regEx .= '$';
