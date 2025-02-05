@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/jblab/password-validator-bundle/compare/2.0.0...2.0.1) (2025-02-05)
+
+
+### Bug Fixes
+
+* Update how RegEx is generated so it validates correctly ([2d35718](https://github.com/jblab/password-validator-bundle/commit/2d3571829382f01c8ab6659451dcc45b9176bb3e))
+
 # [2.0.0](https://github.com/jblab/password-validator-bundle/compare/1.1.2...2.0.0) (2025-02-04)
 
 
