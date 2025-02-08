@@ -7,9 +7,6 @@ plugins:
         - type: docs
           scope: README
           release: patch
-        - type: chore
-          scope: tool-versions
-          release: patch
         - type: refactor
           scope: core-*
           release: minor
