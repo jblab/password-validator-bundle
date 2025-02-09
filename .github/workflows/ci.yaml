@@ -4,74 +4,13 @@ on:
   pull_request:
 
 jobs:
-  tests_coverage:
-    runs-on: "ubuntu-latest"
-    name: "PHP 8.1 Automated Tests (with coverage)"
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v4"
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@v2"
-        with:
-          coverage: "xdebug"
-          php-version: "8.1"
-          tools: composer:v2
-      - name: "Install dependencies"
-        run: |
-          COMPOSER_ROOT_VERSION=dev-master composer update --no-progress --prefer-dist
-      - name: "Tests"
-        run: "php vendor/bin/simple-phpunit --coverage-cobertura coverage.cobertura.xml"
-      - name: Code Coverage Report
-        uses: irongut/CodeCoverageSummary@v1.3.0
-        with:
-          filename: coverage.cobertura.xml
-          badge: true
-          fail_below_min: true
-          format: markdown
-          hide_branch_rate: false
-          hide_complexity: true
-          indicators: true
-          output: both
-          thresholds: '60 80'
-      - name: Publish Summary
-        if: always()
-        run: |
-          cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
+  test-coverage:
+    uses: jblab/.github/.github/workflows/phpunit-coverage.yaml@main
+    with:
+      publish-summary: true
 
-  tests:
-    runs-on: "ubuntu-latest"
-    name: "PHP ${{ matrix.php-version }} Automated Tests"
-    strategy:
-      matrix:
-        php-version:
-          - "8.1"
-          - "8.2"
-          - "8.3"
-          - "8.4"
-      fail-fast: false
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v4"
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@v2"
-        with:
-          coverage: "none"
-          php-version: "${{ matrix.php-version }}"
-          ini-file: "development"
-          tools: composer:v2
-      - name: "Install dependencies"
-        run: "COMPOSER_ROOT_VERSION=dev-master composer update --no-progress --prefer-dist ${{ matrix.flags }}"
-      - name: "PHPUnit"
-        run: "php vendor/bin/simple-phpunit --testdox-text test-results.txt"
-      - name: "Parse JUnit Logs and Publish Summary"
-        if: always()
-        run: |
-          echo "## PHPUnit Test Results" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          if [ -f test-results.txt ]; then
-            sed -i 's/^ \[x\]/✔/g' test-results.txt
-            sed -i 's/^ \[ \]/❌/g' test-results.txt
-            cat test-results.txt >> $GITHUB_STEP_SUMMARY
-          else
-            echo "No test results found." >> $GITHUB_STEP_SUMMARY
-          fi
+  test:
+    uses: jblab/.github/.github/workflows/phpunit.yaml@main
+    with:
+      publish-summary: true
+      phpunit-lowest-fix: 9.6.13
