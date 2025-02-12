@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Jblab\PasswordValidatorBundle\Tests;
+namespace Jblab\PasswordValidatorBundle\Tests\UnitTests;
 
 use Exception;
 use Jblab\PasswordValidatorBundle\Exception\ConfigurationException;

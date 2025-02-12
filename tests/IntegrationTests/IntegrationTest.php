@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @noinspection PhpUnhandledExceptionInspection
+ * @phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses
+ */
+
 /*
  * This file is part of the Jblab PasswordValidatorBundle package.
  * Copyright (c) Jblab <https://jblab.io/>
@@ -7,7 +12,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Jblab\PasswordValidatorBundle\Tests;
+namespace Jblab\PasswordValidatorBundle\Tests\IntegrationTests;
 
 use Exception;
 use Jblab\PasswordValidatorBundle\JblabPasswordValidatorBundle;
@@ -17,7 +22,7 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
 
-class IntegrationTest extends TestCase
+final class IntegrationTest extends TestCase
 {
     public function testServiceWiring()
     {
@@ -50,7 +55,7 @@ class IntegrationTest extends TestCase
     }
 }
 
-class JblabPasswordValidatorTestingKernel extends Kernel
+final class JblabPasswordValidatorTestingKernel extends Kernel
 {
     private array $passwordValidatorConfig;
 
@@ -66,7 +71,7 @@ class JblabPasswordValidatorTestingKernel extends Kernel
     public function registerBundles(): array
     {
         return [
-            new JblabPasswordValidatorBundle()
+            new JblabPasswordValidatorBundle(),
         ];
     }
 

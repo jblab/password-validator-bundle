@@ -27,5 +27,24 @@
         "psr-4": {
             "Jblab\\PasswordValidatorBundle\\Tests\\": "tests/"
         }
+    },
+    "scripts": {
+        "tools:upgrade": [
+            "@tools:upgrade:php-lint",
+            "@tools:upgrade:phpcs",
+            "@tools:upgrade:phpstan"
+        ],
+        "tools:upgrade:php-lint": "composer upgrade -W -d tools/php-lint",
+        "tools:upgrade:phpcs": "composer upgrade -W -d tools/phpcs",
+        "tools:upgrade:phpstan": "composer upgrade -W -d tools/phpstan",
+        "tools:run": [
+            "@tools:run:php-lint",
+            "@tools:run:phpcs",
+            "@tools:run:phpstan"
+        ],
+        "tools:run:php-lint": "tools/php-lint/vendor/bin/parallel-lint src tests",
+        "tools:run:phpcbf": "tools/phpcs/vendor/bin/phpcbf",
+        "tools:run:phpcs": "tools/phpcs/vendor/bin/phpcs",
+        "tools:run:phpstan": "tools/phpstan/vendor/bin/phpstan --memory-limit=1G"
     }
 }

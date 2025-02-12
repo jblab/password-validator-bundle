@@ -1,10 +1,10 @@
 /.idea/
 /.phpunit.result.cache
-/tests/cache
-/vendor/
+/tests/**/cache/
+vendor/
 /phpunit.xml
-node_modules/
 .composer/
+node_modules/
 composer.lock
 coverage.xml
 *.cache

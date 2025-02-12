@@ -40,7 +40,7 @@ class PasswordValidator implements PasswordValidatorInterface
         ?string $specialCharacterSet = null,
         int $minimumLength = 1,
         ?int $maximumLength = null,
-        ?string $excludedCharacterSet = null
+        ?string $excludedCharacterSet = null,
     ) {
         $this->minimumLength           = $minimumLength;
         $this->maximumLength           = $maximumLength;
@@ -55,8 +55,9 @@ class PasswordValidator implements PasswordValidatorInterface
     }
 
     /**
-     * @param bool $throwException If true the validator will throw an exception instead
-     *                               of returning false when password isn't valid.
+     * @param bool $throwException if true the validator will throw an exception instead
+     *                             of returning false when password isn't valid
+     *
      * @throws PasswordExcludedCharacterException
      * @throws PasswordLowercaseException
      * @throws PasswordMaximumLengthException
@@ -144,13 +145,10 @@ class PasswordValidator implements PasswordValidatorInterface
      */
     protected function validateMaximumLength(string $password, bool $throwException): bool
     {
-        if (!is_null($this->maximumLength) && $this->maximumLength < strlen($password)) {
+        if (null !== $this->maximumLength && $this->maximumLength < strlen($password)) {
             if ($throwException) {
                 throw new PasswordMaximumLengthException(
-                    sprintf(
-                        'Password must be %d or less characters long.',
-                        $this->maximumLength
-                    )
+                    sprintf('Password must be %d or less characters long.', $this->maximumLength)
                 );
             }
 
@@ -168,10 +166,7 @@ class PasswordValidator implements PasswordValidatorInterface
         if ($this->minimumLength > strlen($password)) {
             if ($throwException) {
                 throw new PasswordMinimumLengthException(
-                    sprintf(
-                        'Password must be at least %d characters long.',
-                        $this->minimumLength
-                    )
+                    sprintf('Password must be at least %d characters long.', $this->minimumLength)
                 );
             }
 
@@ -259,17 +254,17 @@ class PasswordValidator implements PasswordValidatorInterface
         return true;
     }
 
-    protected function escapeSpecialCharacters(string $characters): string
+    protected function escapeSpecialCharacters(?string $characters): string
     {
         $needEscape = ['[', ']', '(', ')', '{', '}', '*', '+', '?', '|', '^', '$', '.', '\\', '/', '=', '-'];
-        $characters = array_unique(str_split($characters));
+        $characters = array_unique(str_split((string) $characters));
         $escaped    = [];
 
         foreach ($characters as $character) {
             $escaped[] = in_array($character, $needEscape) ? '\\' . $character : $character;
         }
 
-        return join('', $escaped);
+        return implode('', $escaped);
     }
 
     /**
@@ -282,10 +277,7 @@ class PasswordValidator implements PasswordValidatorInterface
             if (preg_match($pattern, $password)) {
                 if ($throwException) {
                     throw new PasswordExcludedCharacterException(
-                        sprintf(
-                            'Password may not contain any of these characters "%s".',
-                            $this->excludedCharacterSet
-                        )
+                        sprintf('Password may not contain any of these characters "%s".', $this->excludedCharacterSet)
                     );
                 }
 
@@ -313,10 +305,7 @@ class PasswordValidator implements PasswordValidatorInterface
             throw new ConfigurationException('Maximum password length can\'t be less than minimum password length');
         }
 
-        if (!is_null($this->specialCharacterSet)
-            && strlen($this->specialCharacterSet) === 0
-            && $this->requireSpecialCharacter
-        ) {
+        if ('' === $this->specialCharacterSet && $this->requireSpecialCharacter) {
             throw new ConfigurationException('Special character is required but character set is empty.');
         }
     }
