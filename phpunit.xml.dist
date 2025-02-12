@@ -1,23 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" backupGlobals="false" colors="true" bootstrap="./vendor/autoload.php">
-  <coverage>
+<phpunit
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+  backupGlobals="false"
+  colors="true"
+  bootstrap="./vendor/autoload.php"
+>
+  <coverage processUncoveredFiles="true">
     <include>
-      <directory>./src</directory>
+      <directory suffix=".php">./src/</directory>
     </include>
+    <exclude>
+      <directory>./src/Resources</directory>
+      <directory>./tests</directory>
+      <directory>./vendor</directory>
+    </exclude>
   </coverage>
   <php>
     <ini name="error_reporting" value="-1"/>
-    <ini name="intl.default_locale" value="en"/>
-    <ini name="intl.error_level" value="0"/>
-    <ini name="memory_limit" value="-1"/>
+    <server name="SHELL_VERBOSITY" value="-1"/>
+    <server name="SYMFONY_PHPUNIT_REMOVE" value=""/>
     <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0"/>
   </php>
   <testsuites>
-    <testsuite name="Integration Tests">
-      <file>./tests/IntegrationTest.php</file>
+    <testsuite name="all">
+      <directory>./tests</directory>
     </testsuite>
-    <testsuite name="Unit Tests">
-      <file>./tests/PasswordValidatorTest.php</file>
+    <testsuite name="integration">
+      <directory>./tests/IntegrationTests</directory>
+    </testsuite>
+    <testsuite name="unit">
+      <directory>./tests/UnitTests</directory>
     </testsuite>
   </testsuites>
+  <listeners>
+    <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
+  </listeners>
 </phpunit>

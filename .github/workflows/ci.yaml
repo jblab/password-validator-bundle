@@ -14,3 +14,20 @@ jobs:
     with:
       publish-summary: true
       phpunit-lowest-fix: 9.6.13
+
+  phplint:
+    uses: jblab/.github/.github/workflows/phplint.yaml@main
+    with:
+      php: 8.1
+      extra-args: src tests
+
+  phpcs:
+    uses: jblab/.github/.github/workflows/phpcs.yaml@main
+    with:
+      php: 8.1
+
+  phpstan:
+    uses: jblab/.github/.github/workflows/phpstan.yaml@main
+    with:
+      php: 8.1
+      install-phpunit-bridge: true
