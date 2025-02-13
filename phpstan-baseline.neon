@@ -4,3 +4,11 @@ parameters:
             message: "#^Cannot call method integerNode() on Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\NodeParentInterface|null.$#"
             count: 1
             path: src/DependencyInjection/Configuration.php
+        -
+            message: "#^Property Jblab\\\\PasswordValidatorBundle\\\\Tests\\\\IntegrationTests\\\\JblabPasswordValidatorTestingKernel\\:\\:\\$passwordValidatorConfig type has no value type specified in iterable type array\\.$#"
+            count: 1
+            path: tests/IntegrationTests/IntegrationTest.php
+        -
+            message: "#^Method Jblab\\\\PasswordValidatorBundle\\\\Tests\\\\IntegrationTests\\\\JblabPasswordValidatorTestingKernel\\:\\:__construct\\(\\) has parameter \\$passwordValidatorConfig with no value type specified in iterable type array\\.$#"
+            count: 1
+            path: tests/IntegrationTests/IntegrationTest.php

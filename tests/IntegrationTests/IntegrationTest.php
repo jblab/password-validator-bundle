@@ -17,6 +17,7 @@ namespace Jblab\PasswordValidatorBundle\Tests\IntegrationTests;
 use Exception;
 use Jblab\PasswordValidatorBundle\JblabPasswordValidatorBundle;
 use Jblab\PasswordValidatorBundle\PasswordValidator;
+use Jblab\PasswordValidatorBundle\PasswordValidatorInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -24,7 +25,7 @@ use Symfony\Component\HttpKernel\Kernel;
 
 final class IntegrationTest extends TestCase
 {
-    public function testServiceWiring()
+    public function testServiceWiring(): void
     {
         $kernel = new JblabPasswordValidatorTestingKernel();
         $kernel->boot();
@@ -35,7 +36,7 @@ final class IntegrationTest extends TestCase
         $this->assertIsBool($validator->validate('password'));
     }
 
-    public function testServiceWiringWithConfiguration()
+    public function testServiceWiringWithConfiguration(): void
     {
         $kernel = new JblabPasswordValidatorTestingKernel([
             'minimum_length'            => 1,
@@ -50,6 +51,7 @@ final class IntegrationTest extends TestCase
         $kernel->boot();
         $container = $kernel->getContainer();
 
+        /** @var PasswordValidatorInterface $validator */
         $validator = $container->get('jblab_password_validator.password_validator');
         $this->assertTrue($validator->validate('1234'));
     }

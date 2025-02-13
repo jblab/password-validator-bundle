@@ -6,6 +6,7 @@ parameters:
         - vendor/autoload.php
     paths:
         - src
-        #- tests
-#    excludePaths:
+        - tests
+    excludePaths:
+        - tests/IntegrationTests/cache
 #    ignoreErrors:

@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 
 class PasswordValidatorTest extends TestCase
 {
-    public function testItValidatesMinimumLength()
+    public function testItValidatesMinimumLength(): void
     {
         $validator = new PasswordValidator(false, false, false, false, null, 10, null, null);
 
@@ -40,7 +40,7 @@ class PasswordValidatorTest extends TestCase
         $validator->validate('123456789', true);
     }
 
-    public function testItValidatesMinimumLengthWithRegEx()
+    public function testItValidatesMinimumLengthWithRegEx(): void
     {
         $validator = new PasswordValidator(false, false, false, false, null, 10, null, null);
         $regEx     = $validator->getRegEx();
@@ -55,7 +55,7 @@ class PasswordValidatorTest extends TestCase
         $this->assertSame($matches, 0);
     }
 
-    public function testItValidatesMaximumLength()
+    public function testItValidatesMaximumLength(): void
     {
         $validator = new PasswordValidator(false, false, false, false, null, 1, 9, null);
 
@@ -69,7 +69,7 @@ class PasswordValidatorTest extends TestCase
         $validator->validate('1234567890', true);
     }
 
-    public function testItValidatesMaximumLengthWithRegEx()
+    public function testItValidatesMaximumLengthWithRegEx(): void
     {
         $validator = new PasswordValidator(false, false, false, false, null, 1, 9, null);
         $regEx     = $validator->getRegEx();
@@ -81,7 +81,7 @@ class PasswordValidatorTest extends TestCase
         $this->assertSame($matches, 0);
     }
 
-    public function testItContainsALowercaseLetter()
+    public function testItContainsALowercaseLetter(): void
     {
         $validator = new PasswordValidator(false, false, true, false, null, 1, 10, null);
 
@@ -95,7 +95,7 @@ class PasswordValidatorTest extends TestCase
         $validator->validate('ABCDEF1234', true);
     }
 
-    public function testItContainsALowercaseLetterWithRegEx()
+    public function testItContainsALowercaseLetterWithRegEx(): void
     {
         $validator = new PasswordValidator(false, false, true, false, null, 1, 10, null);
         $regEx     = $validator->getRegEx();
@@ -107,7 +107,7 @@ class PasswordValidatorTest extends TestCase
         $this->assertSame($matches, 0);
     }
 
-    public function testItContainsAnUppercaseLetter()
+    public function testItContainsAnUppercaseLetter(): void
     {
         $validator = new PasswordValidator(false, true, false, false, null, 1, 10, null);
 
@@ -121,7 +121,7 @@ class PasswordValidatorTest extends TestCase
         $validator->validate('abcdef1234', true);
     }
 
-    public function testItContainsAnUppercaseLetterWithRegEx()
+    public function testItContainsAnUppercaseLetterWithRegEx(): void
     {
         $validator = new PasswordValidator(false, true, false, false, null, 1, 10, null);
         $regEx     = $validator->getRegEx();
@@ -133,7 +133,7 @@ class PasswordValidatorTest extends TestCase
         $this->assertSame($matches, 0);
     }
 
-    public function testItContainsANumber()
+    public function testItContainsANumber(): void
     {
         $validator = new PasswordValidator(false, false, false, true, null, 1, 10, null);
 
@@ -147,7 +147,7 @@ class PasswordValidatorTest extends TestCase
         $validator->validate('abcdef', true);
     }
 
-    public function testItContainsANumberWithRegEx()
+    public function testItContainsANumberWithRegEx(): void
     {
         $validator = new PasswordValidator(false, false, false, true, null, 1, 10, null);
         $regEx     = $validator->getRegEx();
@@ -159,7 +159,7 @@ class PasswordValidatorTest extends TestCase
         $this->assertSame($matches, 0);
     }
 
-    public function testItContainsASpecialCharacter()
+    public function testItContainsASpecialCharacter(): void
     {
         $validator = new PasswordValidator(true, false, false, false, '~!@#$%^&*.())+`=-\\', 1, 64, null);
 
@@ -173,7 +173,7 @@ class PasswordValidatorTest extends TestCase
         $validator->validate('HelloWorld_', true);
     }
 
-    public function testItContainsASpecialCharacterWithRegEx()
+    public function testItContainsASpecialCharacterWithRegEx(): void
     {
         $validator = new PasswordValidator(true, false, false, false, '~!@#$%^&*.())+`=-\\', 1, 64, null);
         $regEx     = $validator->getRegEx();
@@ -185,7 +185,7 @@ class PasswordValidatorTest extends TestCase
         $this->assertSame($matches, 0);
     }
 
-    public function testItDoesNotContainsAnExcludedCharacter()
+    public function testItDoesNotContainsAnExcludedCharacter(): void
     {
         $validator = new PasswordValidator(false, false, false, false, null, 1, 64, '~!@#$%^&*.())+`=-\\');
 
@@ -199,7 +199,7 @@ class PasswordValidatorTest extends TestCase
         $validator->validate('HelloWorld`', true);
     }
 
-    public function testItDoesNotContainsAnExcludedCharacterWithRegEx()
+    public function testItDoesNotContainsAnExcludedCharacterWithRegEx(): void
     {
         $validator = new PasswordValidator(false, false, false, false, null, 1, 64, '~!@#$%^&*.())+`=-\\');
         $regEx     = $validator->getRegEx();
@@ -211,7 +211,7 @@ class PasswordValidatorTest extends TestCase
         $this->assertSame($matches, 0);
     }
 
-    public function testItDoesNotAcceptInvalidConfiguration()
+    public function testItDoesNotAcceptInvalidConfiguration(): void
     {
         // Min length > max length
         try {
