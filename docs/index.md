@@ -90,6 +90,8 @@ use Jblab\PasswordValidatorBundle\PasswordValidatorInterface;
 class SomeController
 {
     public function __construct(private readonly PasswordValidatorInterface $passwordValidator)
+    {
+    }
 
     public function index()
     {
@@ -113,7 +115,7 @@ You can also create a password validator object manually and configure its valid
 requirements. For instance:
 
 ```php
-Jblab\PasswordValidatorBundle\PasswordValidator
+use Jblab\PasswordValidatorBundle\PasswordValidator;
 
 // ...
 
@@ -147,9 +149,9 @@ settings.
 The password validator also provides a method to generate a regular expression that can be used for password validation.
 
 ```php
-/** @var Jblab\PasswordValidatorBundle\PasswordValidator $validator */
-$regEx = $validator->getRegEx();
-$match = preg_match('/' . $passwordValidator->getRegEx() . '/', 'Password!1') === 1;
+/** @var Jblab\PasswordValidatorBundle\PasswordValidator $passwordValidator */
+$regEx = $passwordValidator->getRegEx();
+$match = preg_match('/' . $regEx . '/', 'Password!1') === 1;
 ```
 
 In this example:
