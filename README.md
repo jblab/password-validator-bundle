@@ -22,7 +22,7 @@ composer require jblab/password-validator-bundle
 Open a command console, enter your project directory and execute the
 following command to download the latest stable version of this bundle:
 
-```console
+```shell
 composer require jblab/password-validator-bundle
 ```
 
@@ -51,10 +51,14 @@ use Jblab\PasswordValidatorBundle\PasswordValidatorInterface;
 // ...
 class SomeController
 {
-    public function index(PasswordValidatorInterface $passwordValidator)
+    public function __construct(private readonly PasswordValidatorInterface $passwordValidator)
+    {
+    }
+
+    public function index()
     {
         $password = 'StrongPass1!';
-        $isValid = $passwordValidator->validate($password);
+        $isValid = $this->passwordValidator->validate($password);
 
         if (!$isValid) {
             // Handle invalid password, e.g., return error response
