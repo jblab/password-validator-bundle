@@ -1,0 +1,9 @@
+jblab_password_validator:
+  minimum_length: 1
+  maximum_length: 5
+  require_special_character: false
+  require_uppercase: false
+  require_lowercase: false
+  require_number: false
+  special_character_set: ~
+  excluded_character_set: ~
