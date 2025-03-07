@@ -16,7 +16,9 @@
         "symfony/http-kernel": "^6.4 || ^7.0"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "^6.4 || ^7.0"
+        "symfony/phpunit-bridge": "^6.4 || ^7.0",
+        "symfony/yaml": "^6.4 || ^7.0",
+        "symfony/framework-bundle": "^6.4 || ^7.0"
     },
     "autoload": {
         "psr-4": {
@@ -42,9 +44,9 @@
             "@tools:run:phpcs",
             "@tools:run:phpstan"
         ],
-        "tools:run:php-lint": "tools/php-lint/vendor/bin/parallel-lint src tests",
+        "tools:run:php-lint": "tools/php-lint/vendor/bin/parallel-lint --exclude tests/IntegrationTests/cache/ src tests",
         "tools:run:phpcbf": "tools/phpcs/vendor/bin/phpcbf",
-        "tools:run:phpcs": "tools/phpcs/vendor/bin/phpcs",
+        "tools:run:phpcs": "tools/phpcs/vendor/bin/phpcs -s",
         "tools:run:phpstan": "tools/phpstan/vendor/bin/phpstan --memory-limit=1G"
     }
 }

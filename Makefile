@@ -5,12 +5,12 @@
 SHELL:=/bin/bash
 .SILENT:
 
-.PHONY: help tests phpstan php-lint phpcs run-tools
+.PHONY: help test phpstan php-lint phpcs run-tools
 
 help: ## Display this help and exit
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m  %-30s\033[0m %s\n", $$1, $$2}'
 
-tests: ## Run project's tests suits on different PHP versions
+test: ## Run project's tests suits on different PHP versions
 	for v in "8.1" "8.2" "8.3" "8.4"; do \
 		docker build --tag jblab-password-validator-bundle:$$v  --build-arg PHP_VERSION=$$v --build-arg target=tests .;  \
 		docker run --rm jblab-password-validator-bundle:$$v vendor/bin/simple-phpunit; \
