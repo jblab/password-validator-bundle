@@ -15,6 +15,7 @@
 *.yml      text eol=lf whitespace=blank-at-eol,-blank-at-eof,-space-before-tab,tab-in-indent,tabwidth=2
 *.yaml     text eol=lf whitespace=blank-at-eol,-blank-at-eof,-space-before-tab,tab-in-indent,tabwidth=2
 *.json     text eol=lf whitespace=blank-at-eol,-blank-at-eof,-space-before-tab,tab-in-indent,tabwidth=2
+justfile   text eol=lf whitespace=blank-at-eol,-blank-at-eof,-space-before-tab,tab-in-indent,tabwidth=2
 
 # Define binary file attributes.
 # - Do not treat them as text.
@@ -48,6 +49,6 @@
 CODE_OF_CONDUCT.md  export-ignore
 CONTRIBUTING.md     export-ignore
 Dockerfile          export-ignore
-Makefile            export-ignore
+justfile            export-ignore
 package*.json       export-ignore
 phpunit.xml.dist    export-ignore
