@@ -69,7 +69,9 @@ can build and all tests pass, as well as follow the current coding guidelines.
 When submitting a pull request, please use our [pull request
 template](.github/PULL_REQUEST_TEMPLATE.md).
 
-Pull requests should all be done to the **master** branch.
+New feature should always be based on the _latest maintained branch_ and merged
+back into it. Fixes should always be based on the _oldest maintained branch_
+which contains the error and merged back into it.
 
 ---
 
