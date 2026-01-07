@@ -3,6 +3,8 @@ on:
   push:
   pull_request:
   workflow_dispatch: # allows manual trigger
+  schedule: # periodically verify if everything still passes
+    - cron: '0 0 1,16 * *'
 
 jobs:
   test-coverage:
