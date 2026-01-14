@@ -1,4 +1,4 @@
-branches: [ main ]
+branches: [ 1.x, 2.x ]
 tagFormat: ${version}
 plugins:
   - - '@semantic-release/commit-analyzer'
