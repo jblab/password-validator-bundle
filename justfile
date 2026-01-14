@@ -33,6 +33,7 @@ run: (_run "8.1" "vendor/bin/simple-phpunit --version && composer tools:upgrade 
 
 [private]
 _build +version:
+    docker build --tag jblab-password-validator-bundle:{{version}} --target tests .
 
 [private]
 _run version command: (_build version)

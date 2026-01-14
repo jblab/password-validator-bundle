@@ -8,9 +8,9 @@ ARG PHP_VERSION=8.1
 # ----------------------------------------------------------------------------------------------------------------------
 FROM php:${PHP_VERSION}-alpine AS base
 
+ARG APP_UID=1000
+ARG APP_GID=1000
 ENV APP_USER=app
-ENV APP_UID=1000
-ENV APP_GID=1000
 ENV APP_DIR=/app
 
 RUN set -eux; \
@@ -22,7 +22,7 @@ ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/relea
 RUN set -e; \
     apk add --no-cache git bash
 
-RUN install-php-extensions @composer xdebug
+RUN install-php-extensions @composer
 
 USER $APP_USER
 WORKDIR $APP_DIR
