@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/jblab/password-validator-bundle/compare/2.0.3...2.1.0) (2026-01-16)
+
+
+### Features
+
+* add Symfony 8 support ([bcaf51e](https://github.com/jblab/password-validator-bundle/commit/bcaf51e738866312a66d44a657db8221d27465a8))
+
 ## [2.0.3](https://github.com/jblab/password-validator-bundle/compare/2.0.2...2.0.3) (2025-03-07)
 
 ## [2.0.2](https://github.com/jblab/password-validator-bundle/compare/2.0.1...2.0.2) (2025-02-08)
