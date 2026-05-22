@@ -1,0 +1,41 @@
+name: PR Checks
+on:
+  workflow_call:
+  pull_request:
+    branches: [main]
+#  workflow_run:
+#    workflows: [CI]
+#    branches: [main]
+#    types: [completed]
+
+jobs:
+  check-workflow-status:
+    name: Check Workflow Status
+    runs-on: ubuntu-latest
+    needs:
+      [
+        'test-coverage / PHP 8.1',
+        'test / PHP 8.1, highest deps, --prefer-stable summary',
+        'test / PHP 8.2, highest deps, --prefer-stable summary',
+        'test / PHP 8.3, highest deps, --prefer-stable summary',
+        'test / PHP 8.4, highest deps, --prefer-stable summary',
+        'test / PHP 8.5, highest deps, --prefer-stable summary',
+        'test / PHP 8.1.0, lowest deps, --prefer-lowest summary',
+        'test / PHP 8.5, highest deps, summary',
+        'phplint / PHP Parallel Lint',
+        'phpcs / PHP_CodeSniffer',
+        'phpstan / PHPStan',
+      ]
+    if: always()
+    steps:
+      - name: Check Workflow Status
+        run: |
+          exit_on_result() {
+            if [[ "$2" == "failure" || "$2" == "cancelled" ]]; then
+              echo "Job '$1' failed or was cancelled."
+              exit 1
+            fi
+          }
+          for job in ${{ needs }}; do
+            exit_on_result "$job" "${{ needs[job].result }}"
+          done
